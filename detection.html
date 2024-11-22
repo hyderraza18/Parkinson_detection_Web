@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>Parkinson's Disease Detection</title>
+
+
+    <style>
+        /* General Styles */
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #74ebd5, #9face6);
+            color: #333;
+        }
+        h1, h2 {
+            font-family: "Verdana", sans-serif;
+            color: #fff;
+        }
+        h1 {
+            margin-top: 20px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+        }
+        h2 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #fff;
+        }
+
+        /* Container Styles */
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #ffffffdd;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f9f9f9;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Button Styles */
+        button {
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 1em;
+            border-radius: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Input Styles */
+        input[type="file"], input[type="number"] {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Predictions Section */
+        .predictions div {
+            font-size: 1em;
+            margin: 5px 0;
+            padding: 10px;
+            background: #e3f2fd;
+            border-radius: 8px;
+            text-align: left;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .predictions strong {
+            color: #2e86c1;
+        }
+
+        /* Loading and Error Messages */
+        #loading, #error-message, #recording-message {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        #loading {
+            color: #007bff;
+            display: none;
+        }
+        #error-message, #recording-message {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <h1>Parkinson's Disease Detection</h1>
+    <div class="container">
+        <!-- File Upload Section -->
+        <div class="section">
+            <h2 style="color:burlywood; font-family: 'Times New Roman', Times, serif;">Upload an Audio File</h2>
+            <input type="file" id="file-upload" accept=".wav" />
+            <button id="upload-btn">Classify</button>
+            <p id="loading">Processing... Please wait.</p>
+            <p id="error-message"></p>
+        </div>
+
+        <!-- Live Recording Section -->
+        <div class="section">
+            <h2 style="color:burlywood; font-family: 'Times New Roman', Times, serif;" > Record Live Audio </h2>
+            <label for="duration" style="color: burlywood ; font-family: 'Times New Roman', Times, serif;">Duration (seconds):</label>
+            <input type="number" id="duration" value="5" min="1" max="10" />
+            <button id="record-btn">Record and Classify</button>
+            <p id="recording-message"></p>
+        </div>
+
+        <!-- Predictions Section -->
+        <div class="section predictions">
+            <h2>Predictions</h2>
+            <div><strong>Random Forest:</strong> <span id="rfc_prediction">N/A</span></div>
+            <div><strong>SVM:</strong> <span id="svm_prediction">N/A</span></div>
+            <div><strong>KNN:</strong> <span id="knn_prediction">N/A</span></div>
+            <div><strong>CNN:</strong> <span id="cnn_prediction">N/A</span></div>
+        </div>
+    </div>
+
+    <script>
+        // Handle File Upload and Classification
+        document.getElementById('upload-btn').addEventListener('click', function () {
+            const fileInput = document.getElementById('file-upload');
+            const loadingText = document.getElementById('loading');
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.textContent = ""; // Clear previous errors
+
+            if (!fileInput.files.length) {
+                errorMessage.textContent = "Please select a file before classifying.";
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            loadingText.style.display = "block";
+
+            fetch("/predict", {
+                method: "POST",
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    loadingText.style.display = "none";
+                    if (data.error) {
+                        errorMessage.textContent = data.error;
+                        return;
+                    }
+                    // Update predictions
+                    document.getElementById("rfc_prediction").innerText = data["rfc_prediction"];
+                    document.getElementById("svm_prediction").innerText = data["svm_prediction"];
+                    document.getElementById("knn_prediction").innerText = data["knn_prediction"];
+                    document.getElementById("cnn_prediction").innerText = data["cnn_prediction"];
+                })
+                .catch(error => {
+                    loadingText.style.display = "none";
+                    errorMessage.textContent = "An error occurred during classification. Please try again.";
+                    console.error("Error:", error);
+                });
+        });
+
+        // Handle Live Recording and Classification
+        document.getElementById('record-btn').addEventListener('click', function () {
+            const durationInput = document.getElementById('duration');
+            const recordingMessage = document.getElementById('recording-message');
+            const duration = parseInt(durationInput.value, 10);
+
+            recordingMessage.textContent = "Recording... Please wait.";
+
+            fetch("/record", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `duration=${duration}`,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    recordingMessage.textContent = "";
+                    if (data.error) {
+                        recordingMessage.textContent = data.error;
+                        return;
+                    }
+                    // Update predictions
+                    document.getElementById("rfc_prediction").innerText = data["rfc_prediction"];
+                    document.getElementById("svm_prediction").innerText = data["svm_prediction"];
+                    document.getElementById("knn_prediction").innerText = data["knn_prediction"];
+                    document.getElementById("cnn_prediction").innerText = data["cnn_prediction"];
+                })
+                .catch(error => {
+                    recordingMessage.textContent = "An error occurred during recording. Please try again.";
+                    console.error("Error:", error);
+                });
+                
+        });
+    </script>
+</body>
+</html>

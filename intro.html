@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Parkinson's Detection</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #74ebd5, #9face6);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            position: relative; /* Enables absolute positioning of children */
+        }
+
+        h1 {
+            font-family: "Verdana", sans-serif;
+            color: #333;
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: #ffffffdd;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            width: fit-content;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            background: #ffffffdd;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            z-index: 1;
+        }
+
+        .container h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .container p {
+            font-size: 1.2em;
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        button {
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            color: #fff;
+            border: none;
+            padding: 15px 25px;
+            cursor: pointer;
+            font-size: 1.2em;
+            border-radius: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+        .container.h2{
+            
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        /* Styling for corner images */
+        .photo-container img {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 15px;
+            object-fit: cover;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .photo-container .top-left {
+            top: 10px;
+            left: 10px;
+        }
+
+        .photo-container .top-right {
+            top: 10px;
+            right: 10px;
+        }
+
+        .photo-container .bottom-left {
+            bottom: 10px;
+            left: 10px;
+        }
+
+        .photo-container .bottom-right {
+            bottom: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1> Parkinson Disease Detection 
+        
+    </h1>
+
+    <div class="container">
+        <h2 > Welcome to Parkinson Disease Detection System</h2>
+        <p>
+            Parkinson's disease is a condition that affects the nervous system, causing challenges like tremors, stiffness, and slowed movement. It is more common in older adults and progresses gradually over time.
+        </p>
+        <p>
+            While the diagnosis might feel overwhelming, remember that you are not alone. Many people with Parkinson's live full, active lives with proper care and support. Advances in technology, like our system, make it easier to detect and manage the condition early.
+        </p>
+        <p>
+            Early detection is key to managing symptoms effectively. With our advanced tools, we aim to provide a stress-free experience, helping you focus on the path forward with confidence.
+        </p>
+        <button onclick="window.location.href='detection.html'">Get Started</button>
+        <div class="photo-container">
+            <img src="https://media.istockphoto.com/id/1739325597/photo/nurse-senior-woman-and-smile-with-comfort-holding-hands-or-support-in-nursing-home-for.jpg?s=612x612&w=0&k=20&c=BMCKzCUYgUGPlSugqpmKVJ3tNzeh0Sv_HjYcKOrKuKI=" class="top-left" alt="Happy Patient 1">
+            <img src="https://media.licdn.com/dms/image/v2/C5612AQHgCJdOHk3zqg/article-cover_image-shrink_600_2000/article-cover_image-shrink_600_2000/0/1520101853279?e=2147483647&v=beta&t=QCGvZg_7ots1Fq9zFoGUezKt-iQ59TMBXAcnB1XjcVo" class="top-right" alt="Happy Patient 2">
+            <img src="https://media.istockphoto.com/id/1418999473/photo/doctors-comforting-disabled-elderly-patient.jpg?s=612x612&w=0&k=20&c=ggVR5D9U8IY7irIrgvfqSmlLwA7se4vc2fRSAjV2lSs=" class="bottom-left" alt="Happy Patient 3">
+            <img src="https://img.freepik.com/free-photo/man-working-as-paediatrician_23-2151696259.jpg" class="bottom-right" alt="Happy Patient 4">
+        </div>
+    </div>
+</body>
+</html>
